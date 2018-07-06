@@ -8,5 +8,5 @@
 ## 3. Выборка количества запросов по часам
 ```'select hour(created_at) as hour, count(*) as count from ch_users_stats_new where created_at >= :start and created_at <= :end and broker_id = :broker_id group by hour( created_at )';```
 
-## 4. Применение переменны, выборка первых двух строк за каждый день. Нужно иметь правильные ключи, иначе будут выбираться 1 и 3 строки.
+## 4. Применение переменных, выборка первых двух строк за каждый день. Нужно иметь правильные ключи, иначе будут выбираться 1 и 3 строки.
 ```select *, date_format(created_at, '%Y-%m-%d') as pd, @num := if(date_format(created_at, '%Y-%m-%d') = @dp, @num+1, 1) as `num`, @dp := date_format(created_at, '%Y-%m-%d') as dp where `type`=1 and `author_id` = 6 and `lang`=:lang and (`publication_date` < NOW() or `publication_date` is null) group by "pd, title" having `num` <= 2" order by "created_at desc";```
