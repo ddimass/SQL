@@ -13,3 +13,13 @@
 
 ## 5. Копируем данные из одной таблицы в другую, подставляя текущее время
 ```insert into ch_signals_past (ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, `date`) select ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, NOW() as `date` from ch_signals where (pair like 'EURUSD' or pair like 'gbpusd' or pair like 'eurjpy') and group_id=5```
+
+## 6. Создаём событие которе будет выполнятся каждый час.
+### А) Включаем планировщик
+```SET GLOBAL event_scheduler = ON;```
+### Б) Добавляем событие
+```CREATE EVENT `signals_history`
+    ON SCHEDULE
+      EVERY 1 HOUR
+    DO
+      insert into ch_signals_past (ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, `date`) select ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, NOW() as `date` from ch_signals where (pair like 'EURUSD' or pair like 'gbpusd' or pair like 'eurjpy') and group_id=5;```
