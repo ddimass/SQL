@@ -10,3 +10,6 @@
 
 ## 4. Применение переменных, выборка первых двух строк за каждый день. Нужно иметь правильные ключи, иначе будут выбираться 1 и 3 строки.
 ```select *, date_format(created_at, '%Y-%m-%d') as pd, @num := if(date_format(created_at, '%Y-%m-%d') = @dp, @num+1, 1) as `num`, @dp := date_format(created_at, '%Y-%m-%d') as dp where `type`=1 and `author_id` = 6 and `lang`=:lang and (`publication_date` < NOW() or `publication_date` is null) group by "pd, title" having `num` <= 2" order by "created_at desc";```
+
+## 5. Копируем данные из одной таблицы в другую, подставляя текущее время
+```insert into ch_signals_past (ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, `date`) select ma10, ma20, ma50, ma100, macd, bbands, ichimoku, stochastic, williams, zigzag, pair, group_id, NOW() as `date` from ch_signals where (pair like 'EURUSD' or pair like 'gbpusd' or pair like 'eurjpy') and group_id=5```
